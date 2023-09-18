@@ -1,4 +1,5 @@
 from Funções import *
+
 Arquivos= 'CadastrandoeinformandoDados.txt'
 
 if not arquivoexiste(Arquivos):
@@ -11,24 +12,46 @@ while True:
         LerArquivo(Arquivos)
         print('=' * 40)
         volt = str(input('Deseja voltar ao menu anterior? [S/N] ')).upper()
+
         if volt == 'S':
             continue
+
         else:
-            exit('Progama Encerrado!')
+            exit('\033[1;38mProgama Encerrado!')
+
     elif resposta == 2:
         while True:
             cabecalho('NOVO CADASTRO')
             nome = str(input('Nome:'))
-            idade = leiaint('Idade:')
-            with open('CadastrandoeinformandoDados.txt', 'r') as arquivo:
-                texto = arquivo.read()
-                if nome in texto:
-                    print('\033[1;31mERROR! Pessoa ja cadastrada\033[m')
-                else:
-                    cadastrar(Arquivos, nome, idade)
+            c_pf = valid(input('Seu CPF: '))
+
+            try:
+                with open('CadastrandoeinformandoDados.txt', 'r') as arquivo:
+                    texto = arquivo.read()
+
+                    if c_pf in texto:
+                        print('\033[1;31mERROR! Pessoa ja cadastrada\033[m')
+
+                    else:
+                        cadastrar(Arquivos, nome, c_pf)
+                        cabecalho('[C] para cadastrar novo usuário \n[V] para voltar ao menu principal.')
+                        nova = input('\033[1;38mResposta: ').upper()
+
+                        if nova == 'C':
+                            continue
+
+                        elif nova == 'V':
+                            #cabecalho('Até a proxima!')
+                            break
+
+            except:
+                ...
 
     elif resposta == 3:
-        print('Saindo...')
+        linha()
+        print('\033[1;38mSaindo...')
+        print('\033[1;38mPROGAMA ENCERRADO!')
+        linha()
         break
 
     else:

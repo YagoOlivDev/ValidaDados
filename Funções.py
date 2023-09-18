@@ -1,3 +1,4 @@
+import re
 def leiaint(into):
     while True:
         try:
@@ -62,7 +63,7 @@ def LerArquivo(nome):
 
 
 
-def cadastrar(arq, nome='desconhecido', idade= 0):
+def cadastrar(arq, nome='desconhecido', cpf = 0):
     while True:
         try:
 
@@ -72,15 +73,55 @@ def cadastrar(arq, nome='desconhecido', idade= 0):
             print('Houve um erro na abertura do arquivo')
         else:
             try:
-                a.writelines(f'{nome:<27}Idade {idade} anos\n')
+                a.writelines(f'{nome:<24}CPF: {cpf} \n')
             except:
                 print('\033[1;33mHouve um erro na hora de escrever os dados!\033[m')
             else:
                 print(f'\033[1;32mNovo registro de {nome} ADICIONADO!\033[m')
                 a.close()
-        nova = str(input('Deseja cadastrar uma nova pessoa? [S/N] ').upper())
-        if nova == 'S':
-            break
-        elif nova == 'N':
-            cabecalho('Até a proxima!')
-            exit()
+                break
+        #nova = str(input('Deseja cadastrar uma nova pessoa? [S/N] ').upper())
+        #if nova == 'S':
+            #break
+        #elif nova == 'N':
+            #cabecalho('Até a proxima!')
+            #exit()
+
+
+def valid(cpf):
+    regressivo1 = 10
+    #c_pf = re.sub(r'[^0-11]', '', cpf)
+
+    cpf_digitado = re.sub(r'[^0-9]', '', cpf)
+    nove_digitos = cpf_digitado[:9]
+    #nove_digitos = cpf[:9]
+
+    resultado1 = 0
+    for dig in nove_digitos:
+        resultado1 += int(dig) * regressivo1
+        regressivo1 -= 1
+
+    dig1 = (resultado1 * 10) % 11
+    if dig1 <= 9:
+        dig1 = dig1
+    else:
+        dig1 = 0
+    # print(nove_digitos,dig)
+
+    digitos2 = nove_digitos + str(dig1)
+    regressivo2 = 11
+    resultado2 = 0
+
+    for dig2 in digitos2:
+        resultado2 += int(dig2) * regressivo2
+        regressivo2 -= 1
+    dig2 = (resultado2 * 10) % 11
+    if dig2 <= 9:
+        dig2 = dig2
+    else:
+        dig2 = 0
+    comp = f'{nove_digitos}{dig1}{dig2}'
+    if cpf_digitado == comp:
+        return cpf_digitado
+    else:
+        print('\033[1;31mERROR! CPF inválido!')
